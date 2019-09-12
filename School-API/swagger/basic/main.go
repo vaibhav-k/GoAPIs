@@ -27,6 +27,7 @@ import (
 func main() {
 	gin.SetMode(gin.ReleaseMode)
 	fmt.Println("http://localhost:8080/swagger/doc.json")
+	fmt.Println("http://localhost:8080/swagger/index.html")
 	r := gin.New()
 
 	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
