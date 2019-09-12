@@ -21,7 +21,7 @@ type ExamTypes struct {
 }
 
 // GetExam gets the teacher's detail from the database
-func GetExam(id string) (Exams, error) {
+func GetExam(id string) (Exams, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_exams` WHERE `exam_id` = '%s'", id)
 	result, err := db.Query(s)
@@ -36,11 +36,16 @@ func GetExam(id string) (Exams, error) {
 	for result.Next() {
 		result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
 	}
-	return exam, nil
+
+	if exam.ExamID == 0 {
+		return exam, "Wrong ID"
+	}
+
+	return exam, ""
 }
 
 // GetExams gets all the exams to be held from the database
-func GetExams() ([]Exams, error) {
+func GetExams() ([]Exams, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_exams`")
 	result, err := db.Query(s)
@@ -57,5 +62,9 @@ func GetExams() ([]Exams, error) {
 		result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
 		exams = append(exams, exam)
 	}
-	return exams, nil
+
+	if exams == nil {
+		return exams, "No exam scheduled"
+	}
+	return exams, ""
 }

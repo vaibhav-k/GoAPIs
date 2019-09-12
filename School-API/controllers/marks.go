@@ -18,22 +18,29 @@ func GetMarks(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please use the GET method for this route")
 	}
 	fmt.Println("Getting marks!")
+
 	params := mux.Vars(r)
 
 	// Call the handler
 	marks, err := models.GetMarks(params["id"])
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
+	if err != "" {
+		marksdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       marks,
+		}
+
+		// Return the exam detail's
+		NoContent(w, marksdetails)
 		return
 	}
 
 	marksdetails := models.Response{
-		StatusCode: utils.SuccessCode,
-		Message:    utils.GotMarks,
+		StatusCode: utils.WrongParam,
+		Message:    utils.GetFailed,
 		Data:       marks,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, marksdetails)
@@ -54,7 +61,6 @@ func AddMarks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {
@@ -80,7 +86,6 @@ func UpdateMarks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {

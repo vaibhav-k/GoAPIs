@@ -26,7 +26,8 @@ func IsTeacher(f http.HandlerFunc) http.HandlerFunc {
 		if typeofuser == "teacher" {
 			f(w, r)
 		} else {
-			fmt.Println(utils.ErrorStudent)
+			fmt.Println(utils.ErrorTeacher)
+			w.WriteHeader(http.StatusUnauthorized)
 		}
 	}
 }

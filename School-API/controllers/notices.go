@@ -12,7 +12,7 @@ import (
 
 // GetNotice gets the notices for a student from the database
 func GetNotice(w http.ResponseWriter, r *http.Request) {
-	// CHeck if the Method is correct
+	// Check if the Method is correct
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(utils.WrongMethod), utils.WrongMethod)
 		ResponseJSON(w, "Please use the GET method for this route")
@@ -24,8 +24,15 @@ func GetNotice(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	notice, err := models.GetNotice(w, r, params["id"])
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
+	if err != "" {
+		noticedetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       notice,
+		}
+
+		// Return the exam detail's
+		NoContent(w, noticedetails)
 		return
 	}
 
@@ -34,7 +41,6 @@ func GetNotice(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotNotice,
 		Data:       notice,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, noticedetails)
@@ -52,17 +58,16 @@ func GetNotices(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	notices, err := models.GetNotices()
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		return
-	}
-
 	noticesdetails := models.Response{
 		StatusCode: utils.SuccessCode,
 		Message:    utils.GotNotice,
 		Data:       notices,
 	}
-	w.WriteHeader(http.StatusOK)
+
+	if err != "" {
+		NoContent(w, noticesdetails)
+		return
+	}
 
 	// Return from the function
 	ResponseJSON(w, noticesdetails)
@@ -82,7 +87,6 @@ func AddNotice(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if len(notice.Notice) < 5 {

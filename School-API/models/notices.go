@@ -15,7 +15,7 @@ type Notice struct {
 }
 
 // GetNotice gets the notices for a student from the database
-func GetNotice(w http.ResponseWriter, r *http.Request, id string) (Notice, error) {
+func GetNotice(w http.ResponseWriter, r *http.Request, id string) (Notice, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_notices` WHERE `notice_id` = %s", id)
 	result, err := db.Query(s)
@@ -30,11 +30,16 @@ func GetNotice(w http.ResponseWriter, r *http.Request, id string) (Notice, error
 	for result.Next() {
 		result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
 	}
-	return notice, nil
+
+	if notice.NoticeID == 0 {
+		return notice, "Wrong ID"
+	}
+
+	return notice, ""
 }
 
 // GetNotices gets the notices for a student from the database
-func GetNotices() ([]Notice, error) {
+func GetNotices() ([]Notice, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_notices`")
 	result, err := db.Query(s)
@@ -52,7 +57,11 @@ func GetNotices() ([]Notice, error) {
 		result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
 		notices = append(notices, notice)
 	}
-	return notices, nil
+
+	if notices == nil {
+		return notices, "No notice right now"
+	}
+	return notices, ""
 }
 
 // AddNotice adds a new notice to the database

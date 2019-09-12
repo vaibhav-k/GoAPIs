@@ -31,7 +31,7 @@ func Unique(slice []string) []string {
 }
 
 // GetSubjects gets the subjects for each class from the database
-func GetSubjects() ([]string, error) {
+func GetSubjects() ([]string, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT `standard` FROM `school_classes` sc JOIN `school_class_to_subject` scs ON sc.class_id = scs.class_id JOIN `school_subjects` ss ON ss.subject_id = scs.subject_id")
 	result, err := db.Query(s)
@@ -50,8 +50,10 @@ func GetSubjects() ([]string, error) {
 		names = append(names, name)
 	}
 	uniquenames := Unique(names)
-
-	return uniquenames, nil
+	if uniquenames == nil {
+		return uniquenames, "No subjects right now"
+	}
+	return uniquenames, ""
 }
 
 // AddSubject adds a new notice to the database

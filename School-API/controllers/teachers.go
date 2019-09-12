@@ -38,13 +38,10 @@ func GetTeacher(w http.ResponseWriter, r *http.Request) {
 			Message:    utils.GotTeacher,
 			Data:       teacher,
 		}
-		w.WriteHeader(http.StatusOK)
 
 		// Return from the function
 		ResponseJSON(w, teacherdetails)
 	} else {
-		w.WriteHeader(http.StatusOK)
-
 		// Return from the function
 		ResponseJSON(w, "You have to supply a teacher ID at the end of your URL")
 	}
@@ -76,7 +73,6 @@ func GetTeachers(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotTeachers,
 		Data:       teachers,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, teachersdetails)

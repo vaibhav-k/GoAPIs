@@ -26,12 +26,23 @@ func GetSections(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	if sections == nil {
+		sectiondetails := models.Response{
+			StatusCode: http.StatusNoContent,
+			Message:    utils.GetFailed,
+			Data:       sections,
+		}
+
+		// Return from the function
+		NoContent(w, sectiondetails)
+		return
+	}
+
 	sectiondetails := models.Response{
 		StatusCode: utils.SuccessCode,
 		Message:    utils.GotSections,
 		Data:       sections,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, sectiondetails)
@@ -54,7 +65,6 @@ func AddSection(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Check the user's input and then call the handler
 	if section.SectionID < 0 {

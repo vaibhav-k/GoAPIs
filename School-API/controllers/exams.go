@@ -23,9 +23,16 @@ func GetExam(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	exam, err := models.GetExam(params["id"])
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		DidNotComplete(w, http.StatusText(utils.ErrorCode))
+	if err != "" {
+		examdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       exam,
+		}
+
+		// Return the exam detail's
+		NoContent(w, examdetails)
+		return
 	}
 
 	examdetails := models.Response{
@@ -33,7 +40,6 @@ func GetExam(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotExams,
 		Data:       exam,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, examdetails)
@@ -51,9 +57,10 @@ func GetExams(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	exams, err := models.GetExams()
 
-	if err != nil {
+	if err != "" {
 		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		DidNotComplete(w, http.StatusText(utils.ErrorCode))
+		NoContent(w, http.StatusNoContent)
+		return
 	}
 
 	examsdetails := models.Response{
@@ -61,7 +68,6 @@ func GetExams(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotExams,
 		Data:       exams,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, examsdetails)

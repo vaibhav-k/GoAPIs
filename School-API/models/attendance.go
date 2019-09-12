@@ -26,7 +26,7 @@ type Attendance struct {
 }
 
 // GetAttendance gets the attendance of a date from the database
-func GetAttendance(key string) ([]Attendance, error) {
+func GetAttendance(key string) ([]Attendance, string) {
 	// Query the DB to find the date_id
 	s := fmt.Sprintf("SELECT `date_id` FROM `school_date_to_id` WHERE date = '%s'", key)
 	result, err := db.Query(s)
@@ -57,11 +57,14 @@ func GetAttendance(key string) ([]Attendance, error) {
 			attds = append(attds, attd)
 		}
 	}
-	return attds, nil
+	if attds != nil {
+		return attds, ""
+	}
+	return attds, "Wrong date"
 }
 
 // GetAttendances gets the attendance of all students from the database
-func GetAttendances() ([]Attendance, error) {
+func GetAttendances() ([]Attendance, string) {
 	// Query the DB to find all attendances
 	u := fmt.Sprintf("SELECT `student_id`, `attendance` FROM `school_attendance` e JOIN `school_date_to_id` r ON e.date_id=r.date_id")
 	result, err := db.Query(u)
@@ -79,5 +82,8 @@ func GetAttendances() ([]Attendance, error) {
 		result.Scan(&attd.StudentID, &attd.Attendance)
 		attds = append(attds, attd)
 	}
-	return attds, nil
+	if attds != nil {
+		return attds, ""
+	}
+	return attds, "Wrong date"
 }

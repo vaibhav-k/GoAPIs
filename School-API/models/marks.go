@@ -17,7 +17,7 @@ type Marks struct {
 }
 
 // GetMarks gets the marks of a student from the database
-func GetMarks(id string) ([]Marks, error) {
+func GetMarks(id string) ([]Marks, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_marks` WHERE `student_id` = %s", id)
 	result, err := db.Query(s)
@@ -35,7 +35,12 @@ func GetMarks(id string) ([]Marks, error) {
 		result.Scan(&mark.MarksID, &mark.ExamTypeID, &mark.Subject, &mark.StudentID, &mark.Marks)
 		marks = append(marks, mark)
 	}
-	return marks, nil
+
+	if marks == nil {
+		return marks, "Wrong ID"
+	}
+
+	return marks, ""
 }
 
 // AddMarks adds marks to the database

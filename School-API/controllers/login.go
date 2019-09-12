@@ -31,7 +31,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		DidNotComplete(w, http.StatusText(utils.ErrorCode))
+		NoContent(w, http.StatusNoContent)
+		return
 	}
 
 	logintoken := models.Response{
@@ -39,7 +40,6 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.LoggedIn,
 		Data:       token,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, logintoken)

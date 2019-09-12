@@ -17,15 +17,22 @@ func GetAttendance(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println("Getting attendance!")
 
-	// Get the date parameter frrm the URL
+	// Get the date parameter from the URL
 	key := r.URL.Query().Get("date")
 
 	// Call the handler
 	attds, err := models.GetAttendance(key)
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		DidNotComplete(w, http.StatusText(utils.ErrorCode))
+	if err != "" {
+		attendancess := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       attds,
+		}
+
+		// Return the attendances
+		NoContent(w, attendancess)
+		return
 	}
 
 	attendances := models.Response{
@@ -33,8 +40,6 @@ func GetAttendance(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotAttendances,
 		Data:       attds,
 	}
-	w.WriteHeader(http.StatusOK)
-
 	// Return the attendances
 	ResponseJSON(w, attendances)
 }
@@ -51,9 +56,16 @@ func GetAttendances(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	attds, err := models.GetAttendances()
 
-	if err != nil {
+	if err != "" {
 		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		DidNotComplete(w, http.StatusText(utils.ErrorCode))
+		attendancess := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    utils.GotAttendances,
+			Data:       attds,
+		}
+
+		// Return the attendances
+		NoContent(w, attendancess)
 	}
 
 	attendancess := models.Response{
@@ -61,7 +73,6 @@ func GetAttendances(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotAttendances,
 		Data:       attds,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return the attendances
 	ResponseJSON(w, attendancess)

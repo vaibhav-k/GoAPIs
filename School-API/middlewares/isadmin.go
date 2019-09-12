@@ -25,6 +25,7 @@ func IsAdmin(f http.HandlerFunc) http.HandlerFunc {
 		if typeofuser == "admin" {
 			f(w, r)
 		} else {
+			w.WriteHeader(http.StatusUnauthorized)
 			fmt.Println(utils.ErrorAdmin)
 		}
 	}

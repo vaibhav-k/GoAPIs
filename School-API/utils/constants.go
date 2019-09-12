@@ -50,6 +50,9 @@ const GotSubjectIDs string = "Subject IDs below"
 // GotStudent for when the student details are retrieved successfully
 const GotStudent string = "Student details below"
 
+// GetFailed for when the notice is presented successfully
+const GetFailed string = "Getting failed!"
+
 // AddedSomething for when the objects are added successfully
 const AddedSomething string = "is now added!"
 
@@ -76,6 +79,9 @@ const SuccessCode int = 200
 
 // ErrorCode for when the operation fails
 const ErrorCode int = 500
+
+// WrongParam for when the operation succeeds
+const WrongParam int = 204
 
 // WrongMethod for when the method used is wrong
 const WrongMethod int = 500

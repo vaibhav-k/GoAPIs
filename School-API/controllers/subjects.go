@@ -21,8 +21,8 @@ func GetSubjects(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	subjects, err := models.GetSubjects()
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
+	if err != "" {
+		NoContent(w, subjects)
 		return
 	}
 
@@ -31,7 +31,6 @@ func GetSubjects(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotSubjectIDs,
 		Data:       subjects,
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, subjectsdetails)
@@ -53,13 +52,12 @@ func AddSubject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	w.WriteHeader(http.StatusOK)
 
 	// Check the user's input and then call the handler
 	if subject.SubjectID < 0 {
-		ResponseJSON(w, "Please give a valid ID")
+		NoContent(w, "Please give a valid ID")
 	} else if subject.Title != "" {
-		ResponseJSON(w, "Please give a valid title")
+		NoContent(w, "Please give a valid title")
 	} else {
 		models.AddSubject(w, r, subject)
 	}

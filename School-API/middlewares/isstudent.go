@@ -26,6 +26,7 @@ func IsStudent(f http.HandlerFunc) http.HandlerFunc {
 			f(w, r)
 		} else {
 			fmt.Println(utils.ErrorStudent)
+			w.WriteHeader(http.StatusUnauthorized)
 		}
 	}
 }

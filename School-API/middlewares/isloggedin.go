@@ -5,7 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	"../utils"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -29,7 +28,7 @@ func IsLoggedIn(f http.HandlerFunc) http.HandlerFunc {
 		} else if typeofuser == "admin" {
 			f(w, r)
 		} else {
-			fmt.Println(utils.NeedToLogIn)
+			w.WriteHeader(http.StatusUnauthorized)
 		}
 	}
 }
