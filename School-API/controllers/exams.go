@@ -33,6 +33,7 @@ func GetExam(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotExams,
 		Data:       exam,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, examdetails)
@@ -60,6 +61,7 @@ func GetExams(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotExams,
 		Data:       exams,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, examsdetails)

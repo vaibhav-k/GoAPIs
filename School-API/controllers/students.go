@@ -36,6 +36,7 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotStudent,
 		Data:       students,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, studentsdetails)
@@ -70,6 +71,7 @@ func GetStudent(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotStudent,
 		Data:       student,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, studentdetails)

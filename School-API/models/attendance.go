@@ -87,6 +87,5 @@ func GetAttendances() ([]Attendance, error) {
 		}
 		attds = append(attds, attd)
 	}
-
 	return attds, nil
 }

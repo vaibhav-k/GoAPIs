@@ -33,6 +33,7 @@ func GetMarks(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotMarks,
 		Data:       marks,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, marksdetails)
@@ -53,6 +54,7 @@ func AddMarks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {
@@ -78,6 +80,7 @@ func UpdateMarks(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {

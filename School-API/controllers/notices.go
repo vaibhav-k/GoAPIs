@@ -34,6 +34,7 @@ func GetNotice(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotNotice,
 		Data:       notice,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, noticedetails)
@@ -61,6 +62,7 @@ func GetNotices(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotNotice,
 		Data:       notices,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, noticesdetails)
@@ -80,6 +82,7 @@ func AddNotice(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// User input validation and calling the handler
 	if len(notice.Notice) < 5 {

@@ -31,6 +31,7 @@ func GetSubjects(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotSubjectIDs,
 		Data:       subjects,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, subjectsdetails)
@@ -52,6 +53,7 @@ func AddSubject(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Check the user's input and then call the handler
 	if subject.SubjectID < 0 {

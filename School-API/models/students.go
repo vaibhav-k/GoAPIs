@@ -76,6 +76,7 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request, id string) {
 	// Query the DB
 	s := fmt.Sprintf("DELETE FROM `school_students` WHERE student_id = '%s'", id)
 	result, err := db.Query(s)
+	w.WriteHeader(http.StatusOK)
 
 	if err == nil || result != nil {
 		ResponseJSON(w, fmt.Sprintf("Student id %s %s", id, utils.DeletedSomething))
@@ -89,6 +90,7 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request, id string, student St
 	// Query the DB
 	s := fmt.Sprintf("UPDATE `school_students` SET `student_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s', `telephone` = '%s', `class_section_id` = %d WHERE student_id = '%s'", student.StudentID, student.FirstName, student.LastName, student.EmailID, student.Password, student.Telephone, student.ClassSectionID, id)
 	result, err := db.Query(s)
+	w.WriteHeader(http.StatusOK)
 
 	if err == nil || result != nil {
 		ResponseJSON(w, fmt.Sprintf("Student %s %s", student.FirstName, utils.UpdatedSomething))

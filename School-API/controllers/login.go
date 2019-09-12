@@ -39,6 +39,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.LoggedIn,
 		Data:       token,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, logintoken)

@@ -38,10 +38,13 @@ func GetTeacher(w http.ResponseWriter, r *http.Request) {
 			Message:    utils.GotTeacher,
 			Data:       teacher,
 		}
+		w.WriteHeader(http.StatusOK)
 
 		// Return from the function
 		ResponseJSON(w, teacherdetails)
 	} else {
+		w.WriteHeader(http.StatusOK)
+
 		// Return from the function
 		ResponseJSON(w, "You have to supply a teacher ID at the end of your URL")
 	}
@@ -73,6 +76,7 @@ func GetTeachers(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotTeachers,
 		Data:       teachers,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return from the function
 	ResponseJSON(w, teachersdetails)
@@ -149,11 +153,3 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 		models.UpdateTeacher(w, r, params["id"], teacher)
 	}
 }
-
-// URISegments := strings.Split(r.URL.Path, "/")
-
-// if URISegments[2] != "" {
-// 	w.Write([]byte(URISegments[2]))
-// } else {
-// 	w.Write([]byte("You gotta give a name for me to reply...."))
-// }

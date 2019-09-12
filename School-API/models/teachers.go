@@ -78,8 +78,10 @@ func AddTeacher(w http.ResponseWriter, r *http.Request, teacher Teachers) {
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, fmt.Sprintf("%d %s", teacher.TeacherID, utils.AddedSomething))
 	} else {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, err)
 	}
 }
@@ -91,8 +93,10 @@ func DeleteTeacher(w http.ResponseWriter, r *http.Request, id string) {
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, fmt.Sprintf("Teacher ID %s %s", id, utils.DeletedSomething))
 	} else {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, err)
 	}
 }
@@ -104,8 +108,10 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request, id string, teacher Te
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, fmt.Sprintf("Teacher %s %s", teacher.FirstName, utils.UpdatedSomething))
 	} else {
+		w.WriteHeader(http.StatusOK)
 		ResponseJSON(w, err)
 	}
 }

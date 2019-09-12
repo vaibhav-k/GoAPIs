@@ -33,6 +33,7 @@ func GetAttendance(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotAttendances,
 		Data:       attds,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return the attendances
 	ResponseJSON(w, attendances)
@@ -60,6 +61,7 @@ func GetAttendances(w http.ResponseWriter, r *http.Request) {
 		Message:    utils.GotAttendances,
 		Data:       attds,
 	}
+	w.WriteHeader(http.StatusOK)
 
 	// Return the attendances
 	ResponseJSON(w, attendancess)
