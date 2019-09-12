@@ -28,10 +28,7 @@ func GetNotice(w http.ResponseWriter, r *http.Request, id string) (Notice, error
 	// Make the notice struct
 	var notice Notice
 	for result.Next() {
-		err := result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
 	}
 	return notice, nil
 }
@@ -52,10 +49,7 @@ func GetNotices() ([]Notice, error) {
 	// Make the notices struct
 	for result.Next() {
 		var notice Notice
-		err := result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
 		notices = append(notices, notice)
 	}
 	return notices, nil
@@ -69,9 +63,10 @@ func AddNotice(notice Notice) error {
 
 	if err == nil || result != nil {
 		fmt.Println(notice.Notice, utils.AddedSomething)
-	} else {
-		fmt.Println(utils.InsertionFailed)
-		fmt.Println(err)
+		return nil
 	}
+
+	fmt.Println(utils.InsertionFailed)
+	fmt.Println(err)
 	return err
 }

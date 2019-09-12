@@ -22,6 +22,7 @@ type Response struct {
 
 // ResponseJSON does the common stuff
 func ResponseJSON(w http.ResponseWriter, ResponseData interface{}) {
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(ResponseData)
 }

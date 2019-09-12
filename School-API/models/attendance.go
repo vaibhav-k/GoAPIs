@@ -35,13 +35,12 @@ func GetAttendance(key string) ([]Attendance, error) {
 	}
 
 	defer result.Close()
+
+	// Make the attendance array
 	var attds []Attendance
 	for result.Next() {
 		date := 0
-		err := result.Scan(&date)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&date)
 
 		// Query the DB to find the attendance on the day
 		u := fmt.Sprintf("SELECT `student_id`, `attendance` FROM `school_attendance` e JOIN `school_date_to_id` r ON e.date_id=r.date_id WHERE e.date_id = %d", date)
@@ -52,13 +51,9 @@ func GetAttendance(key string) ([]Attendance, error) {
 
 		defer result2.Close()
 
-		// Make the attendance array
 		for result2.Next() {
 			var attd Attendance
-			err := result2.Scan(&attd.StudentID, &attd.Attendance)
-			if err != nil {
-				panic(err.Error())
-			}
+			result2.Scan(&attd.StudentID, &attd.Attendance)
 			attds = append(attds, attd)
 		}
 	}
@@ -76,15 +71,12 @@ func GetAttendances() ([]Attendance, error) {
 	}
 
 	defer result.Close()
-	var attds []Attendance
 
 	// Make the attendance array
+	var attds []Attendance
 	for result.Next() {
 		var attd Attendance
-		err := result.Scan(&attd.StudentID, &attd.Attendance)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&attd.StudentID, &attd.Attendance)
 		attds = append(attds, attd)
 	}
 	return attds, nil

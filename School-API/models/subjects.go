@@ -39,16 +39,14 @@ func GetSubjects() ([]string, error) {
 		panic(err.Error())
 	}
 
+	// Make the names array
 	var names []string
 
-	// Make the names array
 	defer result.Close()
+
 	for result.Next() {
 		var name string
-		err := result.Scan(&name)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&name)
 		names = append(names, name)
 	}
 	uniquenames := Unique(names)
@@ -63,10 +61,10 @@ func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) {
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
-		fmt.Println(subject.Title, "is now inserted!")
+		ResponseJSON(w, subject.Title+utils.AddedSomething)
 	} else {
-		fmt.Println("Insertion failed")
 		fmt.Println(err)
+		ResponseJSON(w, utils.InsertionFailed)
 	}
 
 	// Add the subjects to the classes specified
@@ -77,7 +75,7 @@ func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) {
 		if er == nil || insert != nil {
 			ResponseJSON(w, fmt.Sprintf("%d %s", subject.Classes[class], utils.AddedSomething))
 		} else {
-			ResponseJSON(w, err)
+			ResponseJSON(w, er)
 		}
 	}
 }

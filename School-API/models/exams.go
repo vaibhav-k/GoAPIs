@@ -31,14 +31,10 @@ func GetExam(id string) (Exams, error) {
 
 	defer result.Close()
 
-	var exam Exams
-
 	// Make the exam struct
+	var exam Exams
 	for result.Next() {
-		err := result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
 	}
 	return exam, nil
 }
@@ -54,15 +50,11 @@ func GetExams() ([]Exams, error) {
 
 	defer result.Close()
 
-	var exams []Exams
-
 	// Make the exams array
+	var exams []Exams
 	for result.Next() {
 		var exam Exams
-		err := result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&exam.ExamID, &exam.TypeID, &exam.Title, &exam.Date, &exam.Time)
 		exams = append(exams, exam)
 	}
 	return exams, nil

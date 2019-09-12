@@ -32,10 +32,7 @@ func GetMarks(id string) ([]Marks, error) {
 	// Make the marks array
 	for result.Next() {
 		var mark Marks
-		err := result.Scan(&mark.MarksID, &mark.ExamTypeID, &mark.Subject, &mark.StudentID, &mark.Marks)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&mark.MarksID, &mark.ExamTypeID, &mark.Subject, &mark.StudentID, &mark.Marks)
 		marks = append(marks, mark)
 	}
 	return marks, nil

@@ -30,10 +30,7 @@ func GetSections() ([]Sections, error) {
 	// Make the sections array
 	for result.Next() {
 		var section Sections
-		err := result.Scan(&section.ClassID, &section.SectionID, &section.ClassSectionID)
-		if err != nil {
-			panic(err.Error())
-		}
+		result.Scan(&section.ClassID, &section.SectionID, &section.ClassSectionID)
 		sections = append(sections, section)
 	}
 
