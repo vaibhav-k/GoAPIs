@@ -13,7 +13,7 @@ type User2 struct {
 }
 
 // LoginUser2 logs a user in
-func LoginUser2(user User2) (string, error) {
+func LoginUser2(user User2) (string, string) {
 	id := 0
 	utype := ""
 	tokenString := ""
@@ -84,6 +84,8 @@ func LoginUser2(user User2) (string, error) {
 		if error != nil {
 			fmt.Println(error)
 		}
+	} else {
+		return tokenString, "Wrong credentials"
 	}
-	return tokenString, nil
+	return tokenString, ""
 }

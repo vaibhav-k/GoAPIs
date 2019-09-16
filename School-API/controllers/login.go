@@ -27,11 +27,16 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Call the handler
-	token, err := models.LoginUser2(user)
+	token, er := models.LoginUser2(user)
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		NoContent(w, http.StatusNoContent)
+	if er != "" {
+		logintoken := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    "Couldn't log in",
+			Data:       "Wrong credentials",
+		}
+		fmt.Println(logintoken.StatusCode)
+		ResponseJSON(w, logintoken)
 		return
 	}
 

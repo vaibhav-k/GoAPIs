@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"../utils"
 )
 
 // Teachers maps TeacherIDs to information about the teachers
@@ -44,7 +42,7 @@ func GetTeacher(id string) (Teachers, string) {
 }
 
 // GetTeachers gets all teachers detail from the database
-func GetTeachers() ([]Teachers, error) {
+func GetTeachers() ([]Teachers, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_teachers`")
 	result, err := db.Query(s)
@@ -62,44 +60,45 @@ func GetTeachers() ([]Teachers, error) {
 		result.Scan(&teacher.TeacherID, &teacher.FirstName, &teacher.LastName, &teacher.EmailID, &teacher.Password)
 		teachers = append(teachers, teacher)
 	}
-	return teachers, nil
+
+	if teachers == nil {
+		return teachers, "No teahers right now!"
+	}
+	return teachers, ""
 }
 
 // AddTeacher adds marks to the database
-func AddTeacher(w http.ResponseWriter, r *http.Request, teacher Teachers) {
+func AddTeacher(w http.ResponseWriter, r *http.Request, teacher Teachers) string {
 	// Insert into the DB
 	s := fmt.Sprintf("INSERT INTO `school_teachers` SET `teacher_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s'", teacher.TeacherID, teacher.FirstName, teacher.LastName, teacher.EmailID, teacher.Password)
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("%d %s", teacher.TeacherID, utils.AddedSomething))
-	} else {
-		ResponseJSON(w, err)
+		return ""
 	}
+	return "Could not add the teacher"
 }
 
 // DeleteTeacher deletes a teacher from the database
-func DeleteTeacher(w http.ResponseWriter, r *http.Request, id string) {
+func DeleteTeacher(w http.ResponseWriter, r *http.Request, id string) string {
 	// Query the DB
 	s := fmt.Sprintf("DELETE FROM `school_teachers` WHERE teacher_id = '%s'", id)
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("Teacher ID %s %s", id, utils.DeletedSomething))
-	} else {
-		ResponseJSON(w, err)
+		return ""
 	}
+	return "Teacher could not be deleted"
 }
 
 // UpdateTeacher updates details of a teacher
-func UpdateTeacher(w http.ResponseWriter, r *http.Request, id string, teacher Teachers) {
+func UpdateTeacher(w http.ResponseWriter, r *http.Request, id string, teacher Teachers) string {
 	// Query the DB
 	s := fmt.Sprintf("UPDATE `school_teachers` SET `teacher_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s' WHERE teacher_id = '%s'", teacher.TeacherID, teacher.FirstName, teacher.LastName, teacher.EmailID, teacher.Password, id)
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("Teacher %s %s", teacher.FirstName, utils.UpdatedSomething))
-	} else {
-		ResponseJSON(w, err)
+		return ""
 	}
+	return "Teacher could not be updated"
 }

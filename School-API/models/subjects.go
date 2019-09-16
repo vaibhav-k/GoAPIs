@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"../utils"
 )
 
 // SubjectAdd adds subjects to their table and also to the classes specified
@@ -57,27 +55,24 @@ func GetSubjects() ([]string, string) {
 }
 
 // AddSubject adds a new notice to the database
-func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) {
+func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) string {
 	// Insert into the DB
 	s := fmt.Sprintf("INSERT INTO `school_subjects`(`subject_id`, `title`) VALUES (%d, '%s')", subject.SubjectID, subject.Title)
-	result, err := db.Query(s)
+	_, err := db.Query(s)
 
-	if err == nil || result != nil {
-		ResponseJSON(w, subject.Title+utils.AddedSomething)
-	} else {
-		fmt.Println(err)
-		ResponseJSON(w, utils.InsertionFailed)
+	if err != nil {
+		return "Could not insert subject"
 	}
 
 	// Add the subjects to the classes specified
 	for class := range subject.Classes {
 		t := fmt.Sprintf("INSERT INTO `school_class_to_subject`(`class_id`, `subject_id`) VALUES (%d, %d)", subject.Classes[class], subject.SubjectID)
-		insert, er := db.Query(t)
+		_, er := db.Query(t)
 
-		if er == nil || insert != nil {
-			ResponseJSON(w, fmt.Sprintf("%d %s", subject.Classes[class], utils.AddedSomething))
-		} else {
-			ResponseJSON(w, er)
+		if er != nil {
+			return "Could not add subject to classes"
 		}
 	}
+
+	return ""
 }

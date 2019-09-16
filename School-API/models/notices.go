@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"../utils"
 )
 
 // Notice struct for notices
@@ -49,9 +47,8 @@ func GetNotices() ([]Notice, string) {
 
 	defer result.Close()
 
-	var notices []Notice
-
 	// Make the notices struct
+	var notices []Notice
 	for result.Next() {
 		var notice Notice
 		result.Scan(&notice.TeacherID, &notice.NoticeID, &notice.Notice)
@@ -65,17 +62,13 @@ func GetNotices() ([]Notice, string) {
 }
 
 // AddNotice adds a new notice to the database
-func AddNotice(notice Notice) error {
+func AddNotice(notice Notice) string {
 	// Insert into the DB
 	s := fmt.Sprintf("INSERT INTO `school_notices`(`teacher_id`, `notice`) VALUES (%d, '%s')", notice.TeacherID, notice.Notice)
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {
-		fmt.Println(notice.Notice, utils.AddedSomething)
-		return nil
+		return ""
 	}
-
-	fmt.Println(utils.InsertionFailed)
-	fmt.Println(err)
-	return err
+	return "Notice could not be added"
 }

@@ -21,12 +21,7 @@ func GetSections(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	sections, err := models.GetSections()
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		return
-	}
-
-	if sections == nil {
+	if err != "" {
 		sectiondetails := models.Response{
 			StatusCode: http.StatusNoContent,
 			Message:    utils.GetFailed,
@@ -34,7 +29,7 @@ func GetSections(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Return from the function
-		NoContent(w, sectiondetails)
+		ResponseJSON(w, sectiondetails)
 		return
 	}
 
@@ -56,7 +51,6 @@ func AddSection(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please use the POST method for this route")
 	}
 	fmt.Println("Adding a new section!")
-	w.Header().Set("Content-Type", "application/json")
 
 	// Get the user details from the POST body
 	decoder := json.NewDecoder(r.Body)
@@ -74,6 +68,27 @@ func AddSection(w http.ResponseWriter, r *http.Request) {
 	} else if section.ClassSectionID < 0 {
 		ResponseJSON(w, "Please enter a valid class-section ID")
 	} else {
-		models.AddSection(w, r, section)
+		err := models.AddSection(w, r, section)
+
+		if err != "" {
+			sectiondetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.InsertionFailed,
+				Data:       "Section is not added added!",
+			}
+
+			// Return from the function
+			ResponseJSON(w, sectiondetails)
+			return
+		}
+
+		sectiondetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Section is now added",
+			Data:       "Section is now added",
+		}
+
+		// Return from the function
+		ResponseJSON(w, sectiondetails)
 	}
 }

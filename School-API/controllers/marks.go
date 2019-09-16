@@ -32,13 +32,13 @@ func GetMarks(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Return the exam detail's
-		NoContent(w, marksdetails)
+		ResponseJSON(w, marksdetails)
 		return
 	}
 
 	marksdetails := models.Response{
-		StatusCode: utils.WrongParam,
-		Message:    utils.GetFailed,
+		StatusCode: utils.SuccessCode,
+		Message:    utils.GotMarks,
 		Data:       marks,
 	}
 
@@ -66,8 +66,25 @@ func AddMarks(w http.ResponseWriter, r *http.Request) {
 	if mark.Marks < 0 {
 		ResponseJSON(w, "Please enter positive marks")
 	} else {
-		models.AddMarks(w, r, mark)
-		ResponseJSON(w, "Marks added!")
+		er := models.AddMarks(w, r, mark)
+
+		if er != "" {
+			markdetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.InsertionFailed,
+				Data:       utils.InsertionFailed,
+			}
+			ResponseJSON(w, markdetails)
+			return
+		}
+
+		markdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Marks added!",
+			Data:       "Marks added!",
+		}
+		ResponseJSON(w, markdetails)
+		return
 	}
 }
 
@@ -92,7 +109,24 @@ func UpdateMarks(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please enter positive marks")
 	} else {
 		params := mux.Vars(r)
-		models.UpdateMarks(w, r, params["id"], mark)
-		ResponseJSON(w, "Marks updated!")
+		er := models.UpdateMarks(w, r, params["id"], mark)
+
+		if er != "" {
+			markdetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.UpdatingFailed,
+				Data:       utils.UpdatingFailed,
+			}
+			ResponseJSON(w, markdetails)
+			return
+		}
+
+		markdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Updating successful",
+			Data:       "Updating successful",
+		}
+		ResponseJSON(w, markdetails)
+		return
 	}
 }

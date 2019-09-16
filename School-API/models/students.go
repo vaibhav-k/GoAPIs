@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"../utils"
 )
 
 // Students maps StudentIDs to information about the students
@@ -19,7 +17,7 @@ type Students struct {
 }
 
 // GetStudents gets all of all students from the database
-func GetStudents() ([]Students, error) {
+func GetStudents() ([]Students, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_students`")
 	result, err := db.Query(s)
@@ -36,7 +34,11 @@ func GetStudents() ([]Students, error) {
 		result.Scan(&student.StudentID, &student.FirstName, &student.LastName, &student.EmailID, &student.Password, &student.Telephone, &student.ClassSectionID)
 		students = append(students, student)
 	}
-	return students, nil
+
+	if students == nil {
+		return students, "No students right now"
+	}
+	return students, ""
 }
 
 // GetStudent gets all the details of a student from the database
@@ -64,27 +66,25 @@ func GetStudent(id string) (Students, string) {
 }
 
 // DeleteStudent deletes a student from the database
-func DeleteStudent(w http.ResponseWriter, r *http.Request, id string) {
+func DeleteStudent(w http.ResponseWriter, r *http.Request, id string) string {
 	// Query the DB
 	s := fmt.Sprintf("DELETE FROM `school_students` WHERE student_id = '%s'", id)
 	result, err := db.Query(s)
 
-	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("Student id %s %s", id, utils.DeletedSomething))
-	} else {
-		ResponseJSON(w, err)
+	if err == nil && result != nil {
+		return ""
 	}
+	return "Deletion failed!"
 }
 
 // UpdateStudent updates details of a student
-func UpdateStudent(w http.ResponseWriter, r *http.Request, id string, student Students) {
+func UpdateStudent(w http.ResponseWriter, r *http.Request, id string, student Students) string {
 	// Query the DB
 	s := fmt.Sprintf("UPDATE `school_students` SET `student_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s', `telephone` = '%s', `class_section_id` = %d WHERE student_id = '%s'", student.StudentID, student.FirstName, student.LastName, student.EmailID, student.Password, student.Telephone, student.ClassSectionID, id)
 	result, err := db.Query(s)
 
-	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("Student %s %s", student.FirstName, utils.UpdatedSomething))
-	} else {
-		ResponseJSON(w, err)
+	if err == nil && result != nil {
+		return ""
 	}
+	return "Updating failed!"
 }

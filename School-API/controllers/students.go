@@ -22,13 +22,14 @@ func GetStudents(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	students, err := models.GetStudents()
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
+	if err != "" {
+		studentsdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       students,
+		}
+		ResponseJSON(w, studentsdetails)
 		return
-	}
-
-	if students[0].FirstName == "" {
-		fmt.Println("No students in the database right now")
 	}
 
 	studentsdetails := models.Response{
@@ -55,20 +56,20 @@ func GetStudent(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	student, err := models.GetStudent(params["id"])
 
-	if err != "" {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		ResponseJSON(w, "No student with this ID")
-		return
-	}
-
-	if student.FirstName == "" {
-		fmt.Println("No student in the database with this ID")
-	}
-
 	studentdetails := models.Response{
 		StatusCode: utils.SuccessCode,
 		Message:    utils.GotStudent,
 		Data:       student,
+	}
+
+	if err != "" {
+		studentdetails = models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       student,
+		}
+		ResponseJSON(w, studentdetails)
+		return
 	}
 
 	// Return from the function
@@ -87,7 +88,26 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 
 	// Call the handler
 	params := mux.Vars(r)
-	models.DeleteStudent(w, r, params["id"])
+	err := models.DeleteStudent(w, r, params["id"])
+
+	studentdetails := models.Response{
+		StatusCode: utils.SuccessCode,
+		Message:    "Deleted the student!",
+		Data:       "Deleted the student!",
+	}
+
+	if err != "" {
+		studentdetails = models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.DeletionFailed,
+			Data:       utils.DeletionFailed,
+		}
+		ResponseJSON(w, studentdetails)
+		return
+	}
+
+	// Return from the function
+	ResponseJSON(w, studentdetails)
 }
 
 // UpdateStudent updates details of a student
@@ -117,6 +137,25 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please give a password")
 	} else {
 		params := mux.Vars(r)
-		models.UpdateStudent(w, r, params["id"], student)
+		err := models.UpdateStudent(w, r, params["id"], student)
+
+		studentdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Updated the student!",
+			Data:       "Updated the student!",
+		}
+
+		if err != "" {
+			studentdetails = models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.UpdatingFailed,
+				Data:       utils.UpdatingFailed,
+			}
+			ResponseJSON(w, studentdetails)
+			return
+		}
+
+		// Return from the function
+		ResponseJSON(w, studentdetails)
 	}
 }

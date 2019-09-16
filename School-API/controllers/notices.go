@@ -32,7 +32,7 @@ func GetNotice(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Return the exam detail's
-		NoContent(w, noticedetails)
+		ResponseJSON(w, noticedetails)
 		return
 	}
 
@@ -59,14 +59,20 @@ func GetNotices(w http.ResponseWriter, r *http.Request) {
 	notices, err := models.GetNotices()
 
 	noticesdetails := models.Response{
-		StatusCode: utils.SuccessCode,
-		Message:    utils.GotNotice,
+		StatusCode: utils.WrongParam,
+		Message:    utils.GetFailed,
 		Data:       notices,
 	}
 
 	if err != "" {
-		NoContent(w, noticesdetails)
+		ResponseJSON(w, noticesdetails)
 		return
+	}
+
+	noticesdetails = models.Response{
+		StatusCode: utils.SuccessCode,
+		Message:    utils.GotNotice,
+		Data:       notices,
 	}
 
 	// Return from the function
@@ -90,15 +96,29 @@ func AddNotice(w http.ResponseWriter, r *http.Request) {
 
 	// User input validation and calling the handler
 	if len(notice.Notice) < 5 {
-		ResponseJSON(w, "The length notice should be >= 5")
-	} else if notice.NoticeID < 1 {
-		ResponseJSON(w, "The notice ID should be >= 1")
+		noticedetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    "The length notice should be >= 5",
+			Data:       "The length notice should be >= 5",
+		}
+		ResponseJSON(w, noticedetails)
 	} else {
 		err := models.AddNotice(notice)
-		if err != nil {
-			ResponseJSON(w, err)
-		} else {
-			ResponseJSON(w, "Notice added!")
+		if err != "" {
+			noticedetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.InsertionFailed,
+				Data:       utils.InsertionFailed,
+			}
+			ResponseJSON(w, noticedetails)
+			return
 		}
+		noticedetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Notice added!",
+			Data:       "Notice added!",
+		}
+		ResponseJSON(w, noticedetails)
+		return
 	}
 }

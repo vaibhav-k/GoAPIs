@@ -27,16 +27,20 @@ func GetTeacher(w http.ResponseWriter, r *http.Request) {
 		// Call the handler
 		teacher, err := models.GetTeacher(URISegments[2])
 
-		if err != "" {
-			http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-			ResponseJSON(w, "No teacher with this ID")
-			return
-		}
-
 		teacherdetails := models.Response{
 			StatusCode: utils.SuccessCode,
 			Message:    utils.GotTeacher,
 			Data:       teacher,
+		}
+
+		if err != "" {
+			teacherdetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.GetFailed,
+				Data:       teacher,
+			}
+			ResponseJSON(w, teacherdetails)
+			return
 		}
 
 		// Return from the function
@@ -59,19 +63,20 @@ func GetTeachers(w http.ResponseWriter, r *http.Request) {
 	// Call the handler
 	teachers, err := models.GetTeachers()
 
-	if err != nil {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		return
-	}
-
-	if teachers[0].FirstName == "" {
-		fmt.Println("No teachers in the database right now")
-	}
-
 	teachersdetails := models.Response{
 		StatusCode: utils.SuccessCode,
 		Message:    utils.GotTeachers,
 		Data:       teachers,
+	}
+
+	if err != "" {
+		teachersdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       teachers,
+		}
+		ResponseJSON(w, teachersdetails)
+		return
 	}
 
 	// Return from the function
@@ -104,7 +109,25 @@ func AddTeacher(w http.ResponseWriter, r *http.Request) {
 	} else if teacher.Password == "" {
 		ResponseJSON(w, "Please give a password")
 	} else {
-		models.AddTeacher(w, r, teacher)
+		err := models.AddTeacher(w, r, teacher)
+
+		if err != "" {
+			teacherdetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.InsertionFailed,
+				Data:       err,
+			}
+			ResponseJSON(w, teacherdetails)
+			return
+		}
+
+		teacherdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Adding successful",
+			Data:       "Adding successful",
+		}
+		ResponseJSON(w, teacherdetails)
+		return
 	}
 }
 
@@ -120,7 +143,25 @@ func DeleteTeacher(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 
 	// Call the handler
-	models.DeleteTeacher(w, r, params["id"])
+	er := models.DeleteTeacher(w, r, params["id"])
+
+	if er != "" {
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.DeletionFailed,
+			Data:       er,
+		}
+		ResponseJSON(w, teacherdetails)
+		return
+	}
+
+	teacherdetails := models.Response{
+		StatusCode: utils.SuccessCode,
+		Message:    "Deleting successful",
+		Data:       "Deleting successful",
+	}
+	ResponseJSON(w, teacherdetails)
+	return
 }
 
 // UpdateTeacher updates details of a teacher
@@ -146,6 +187,24 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 	} else if teacher.Password == "" {
 		ResponseJSON(w, "Please give a password")
 	} else {
-		models.UpdateTeacher(w, r, params["id"], teacher)
+		er := models.UpdateTeacher(w, r, params["id"], teacher)
+
+		if er != "" {
+			teacherdetails := models.Response{
+				StatusCode: utils.WrongParam,
+				Message:    utils.UpdatingFailed,
+				Data:       utils.UpdatingFailed,
+			}
+			ResponseJSON(w, teacherdetails)
+			return
+		}
+
+		teacherdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Updating successful",
+			Data:       "Updating successful",
+		}
+		ResponseJSON(w, teacherdetails)
+		return
 	}
 }

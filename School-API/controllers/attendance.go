@@ -31,7 +31,7 @@ func GetAttendance(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Return the attendances
-		NoContent(w, attendancess)
+		ResponseJSON(w, attendancess)
 		return
 	}
 
@@ -59,13 +59,13 @@ func GetAttendances(w http.ResponseWriter, r *http.Request) {
 	if err != "" {
 		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
 		attendancess := models.Response{
-			StatusCode: utils.SuccessCode,
-			Message:    utils.GotAttendances,
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
 			Data:       attds,
 		}
 
 		// Return the attendances
-		NoContent(w, attendancess)
+		ResponseJSON(w, attendancess)
 	}
 
 	attendancess := models.Response{

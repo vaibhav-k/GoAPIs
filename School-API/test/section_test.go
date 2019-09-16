@@ -1,6 +1,8 @@
 package test
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -18,6 +20,7 @@ func RouterSection() *mux.Router {
 	fmt.Println("http://localhost:8080")
 
 	router.HandleFunc("/sections", controllers.GetSections).Methods("GET")
+	router.HandleFunc("/sections", controllers.AddSection).Methods("POSt")
 
 	return router
 }
@@ -29,5 +32,30 @@ func TestSectionsEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/sections", nil)
 	response := httptest.NewRecorder()
 	RouterSection().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusOK, response.Code, "OK response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
+}
+
+func TestPostSectionEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	section := &models.Sections{
+		ClassID:        8,
+		SectionID:      3,
+		ClassSectionID: 24,
+	}
+	jsonSection, _ := json.Marshal(section)
+
+	request, _ := http.NewRequest("POST", "/sections", bytes.NewBuffer(jsonSection))
+	response := httptest.NewRecorder()
+	RouterSection().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }

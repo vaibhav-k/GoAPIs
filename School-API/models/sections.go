@@ -3,8 +3,6 @@ package models
 import (
 	"fmt"
 	"net/http"
-
-	"../utils"
 )
 
 // Sections struct for sections to IDs
@@ -15,7 +13,7 @@ type Sections struct {
 }
 
 // GetSections gets all the details of all sections from the database
-func GetSections() ([]Sections, error) {
+func GetSections() ([]Sections, string) {
 	// Query the DB
 	s := fmt.Sprintf("SELECT * FROM `school_sections`")
 	result, err := db.Query(s)
@@ -34,18 +32,20 @@ func GetSections() ([]Sections, error) {
 		sections = append(sections, section)
 	}
 
-	return sections, nil
+	if sections == nil {
+		return sections, "Couldn't get the sections"
+	}
+	return sections, ""
 }
 
 // AddSection gets all the details of all sections from the database
-func AddSection(w http.ResponseWriter, r *http.Request, section Sections) {
+func AddSection(w http.ResponseWriter, r *http.Request, section Sections) string {
 	// Insert into the DB
 	s := fmt.Sprintf("INSERT INTO `school_sections` SET `class_id` = %d, `section` = %d, `class_section_id` = %d", section.ClassID, section.SectionID, section.ClassSectionID)
 	result, err := db.Query(s)
 
-	if err == nil || result != nil {
-		ResponseJSON(w, fmt.Sprintf("%d %s", section.ClassSectionID, utils.AddedSomething))
-	} else {
-		ResponseJSON(w, err)
+	if err == nil && result != nil {
+		return ""
 	}
+	return "Could not add the section"
 }

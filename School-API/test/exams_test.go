@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -21,6 +22,7 @@ func RouterExam() *mux.Router {
 	router.HandleFunc("/exams", controllers.GetExams).Methods("GET")
 	return router
 }
+
 func TestExamsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -28,7 +30,11 @@ func TestExamsEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/exams", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusOK, response.Code, "OK response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
 func TestValidExamIDEndpoint(t *testing.T) {
@@ -38,7 +44,11 @@ func TestValidExamIDEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/exams/1", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusOK, response.Code, "Content response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
 func TestInvalidExamIDEndpoint(t *testing.T) {
@@ -48,5 +58,9 @@ func TestInvalidExamIDEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/exams/1234567890", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusNoContent, response.Code, "No content response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

@@ -1,6 +1,7 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -30,7 +31,11 @@ func TestValidAttendancesEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/attendance?date=02-Jan-20", nil)
 	response := httptest.NewRecorder()
 	RouterAttd().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusOK, response.Code, "OK response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
 func TestInvalidAttendancesEndpoint(t *testing.T) {
@@ -40,7 +45,11 @@ func TestInvalidAttendancesEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/attendance?date=200-Jan-20", nil)
 	response := httptest.NewRecorder()
 	RouterAttd().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusNoContent, response.Code, "No content response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
 func TestAttendancesEndpoint(t *testing.T) {
@@ -50,5 +59,9 @@ func TestAttendancesEndpoint(t *testing.T) {
 	request, _ := http.NewRequest("GET", "/attendances", nil)
 	response := httptest.NewRecorder()
 	RouterAttd().ServeHTTP(response, request)
-	assert.Equal(t, http.StatusOK, response.Code, "OK response is expected")
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }

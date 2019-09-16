@@ -31,7 +31,7 @@ func GetExam(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// Return the exam detail's
-		NoContent(w, examdetails)
+		ResponseJSON(w, examdetails)
 		return
 	}
 
@@ -58,8 +58,13 @@ func GetExams(w http.ResponseWriter, r *http.Request) {
 	exams, err := models.GetExams()
 
 	if err != "" {
-		http.Error(w, http.StatusText(utils.ErrorCode), utils.ErrorCode)
-		NoContent(w, http.StatusNoContent)
+		examsdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.GetFailed,
+			Data:       exams,
+		}
+
+		ResponseJSON(w, examsdetails)
 		return
 	}
 
