@@ -67,24 +67,46 @@ func GetStudent(id string) (Students, string) {
 
 // DeleteStudent deletes a student from the database
 func DeleteStudent(w http.ResponseWriter, r *http.Request, id string) string {
-	// Query the DB
-	s := fmt.Sprintf("DELETE FROM `school_students` WHERE student_id = '%s'", id)
-	result, err := db.Query(s)
+	s := fmt.Sprintf("SELECT * FROM `school_students` WHERE student_id = '%s'", id)
+	result, _ := db.Query(s)
 
-	if err == nil && result != nil {
-		return ""
+	// Make the student struct
+	var student Students
+	for result.Next() {
+		result.Scan(&student.StudentID, &student.FirstName, &student.LastName, &student.EmailID, &student.Password, &student.Telephone, &student.ClassSectionID)
+	}
+
+	if student.StudentID != 0 {
+		// Query the DB
+		s := fmt.Sprintf("DELETE FROM `school_students` WHERE student_id = '%s'", id)
+		result, err := db.Query(s)
+
+		if err == nil || result != nil {
+			return ""
+		}
 	}
 	return "Deletion failed!"
 }
 
 // UpdateStudent updates details of a student
 func UpdateStudent(w http.ResponseWriter, r *http.Request, id string, student Students) string {
-	// Query the DB
-	s := fmt.Sprintf("UPDATE `school_students` SET `student_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s', `telephone` = '%s', `class_section_id` = %d WHERE student_id = '%s'", student.StudentID, student.FirstName, student.LastName, student.EmailID, student.Password, student.Telephone, student.ClassSectionID, id)
-	result, err := db.Query(s)
+	// Check if the ID exists
+	s := fmt.Sprintf("SELECT * FROM `school_students` WHERE `student_id` = '%s'", id)
+	result, _ := db.Query(s)
 
-	if err == nil && result != nil {
-		return ""
+	var student_scan Students
+	for result.Next() {
+		result.Scan(&student_scan.StudentID, &student_scan.FirstName, &student_scan.LastName, &student_scan.EmailID, &student_scan.Password, &student_scan.Telephone, &student_scan.ClassSectionID)
+	}
+
+	if student_scan.StudentID != 0 {
+		// Query the DB
+		s := fmt.Sprintf("UPDATE `school_students` SET `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s', `telephone` = '%s', `class_section_id` = %d WHERE student_id = '%s'", student.FirstName, student.LastName, student.EmailID, student.Password, student.Telephone, student.ClassSectionID, id)
+		result, err := db.Query(s)
+
+		if err == nil && result != nil {
+			return ""
+		}
 	}
 	return "Updating failed!"
 }

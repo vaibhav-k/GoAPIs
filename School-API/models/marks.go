@@ -54,7 +54,7 @@ func AddMarks(w http.ResponseWriter, r *http.Request, mark Marks) string {
 // UpdateMarks updates marks of an exam
 func UpdateMarks(w http.ResponseWriter, r *http.Request, id string, mark Marks) string {
 	// Query the DB
-	s := fmt.Sprintf("UPDATE `school_marks` SET `marks_id` = %d, `exam_type_id` = %d, `subject` = '%s', `student_id` = %d, `marks` = %d WHERE `marks_id` = '%s'", mark.MarksID, mark.ExamTypeID, mark.Subject, mark.StudentID, mark.Marks, id)
+	s := fmt.Sprintf("UPDATE `school_marks` SET `exam_type_id` = %d, `subject` = '%s', `student_id` = %d, `marks` = %d WHERE `marks_id` = '%s'", mark.ExamTypeID, mark.Subject, mark.StudentID, mark.Marks, id)
 	result, err := db.Query(s)
 
 	if err == nil || result != nil {

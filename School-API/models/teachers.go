@@ -93,12 +93,23 @@ func DeleteTeacher(w http.ResponseWriter, r *http.Request, id string) string {
 
 // UpdateTeacher updates details of a teacher
 func UpdateTeacher(w http.ResponseWriter, r *http.Request, id string, teacher Teachers) string {
-	// Query the DB
-	s := fmt.Sprintf("UPDATE `school_teachers` SET `teacher_id` = %d, `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s' WHERE teacher_id = '%s'", teacher.TeacherID, teacher.FirstName, teacher.LastName, teacher.EmailID, teacher.Password, id)
-	result, err := db.Query(s)
+	// Check if the ID exists
+	s := fmt.Sprintf("SELECT * FROM `school_teachers` WHERE `teacher_id` = '%s'", id)
+	result, _ := db.Query(s)
 
-	if err == nil || result != nil {
-		return ""
+	var teacher_scan Teachers
+	for result.Next() {
+		result.Scan(&teacher_scan.TeacherID, &teacher_scan.FirstName, &teacher_scan.LastName, &teacher_scan.EmailID, &teacher_scan.Password)
 	}
-	return "Teacher could not be updated"
+
+	if teacher_scan.TeacherID != 0 {
+		// Query the DB
+		s := fmt.Sprintf("UPDATE `school_teachers` SET `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s' WHERE `teacher_id` = '%s'", teacher.FirstName, teacher.LastName, teacher.EmailID, teacher.Password, id)
+		_, err := db.Query(s)
+
+		if err == nil {
+			return ""
+		}
+	}
+	return "Updating failed!"
 }

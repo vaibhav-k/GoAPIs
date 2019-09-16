@@ -96,12 +96,11 @@ func TestPostTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
-func TestUpdateTeacherEndpoint(t *testing.T) {
+func TestValidIDUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
 	teacher := &models.Teachers{
-		TeacherID: 15,
 		FirstName: "Poorest",
 		LastName:  "Man",
 		EmailID:   "poorestman@teaching.com",
@@ -117,6 +116,28 @@ func TestUpdateTeacherEndpoint(t *testing.T) {
 	json.NewDecoder(response.Body).Decode(&resp)
 
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
+}
+
+func TestInvalidIDUpdateTeacherEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	teacher := &models.Teachers{
+		FirstName: "Poorest",
+		LastName:  "Man",
+		EmailID:   "poorestman@teaching.com",
+		Password:  "teacher",
+	}
+	jsonPerson, _ := json.Marshal(teacher)
+
+	request, _ := http.NewRequest("PUT", "/teacher/111", bytes.NewBuffer(jsonPerson))
+	response := httptest.NewRecorder()
+	RouterTeacher().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
 func TestDeleteTeacherEndpoint(t *testing.T) {

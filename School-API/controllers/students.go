@@ -4,11 +4,18 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"regexp"
 
 	"../models"
 	"../utils"
 	"github.com/gorilla/mux"
 )
+
+// validateEmail checks if the ID is valid
+func validateEmail(email string) bool {
+	Re := regexp.MustCompile(`^[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,4}$`)
+	return Re.MatchString(email)
+}
 
 // GetStudents gets all of all students from the database
 func GetStudents(w http.ResponseWriter, r *http.Request) {
@@ -90,20 +97,20 @@ func DeleteStudent(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	err := models.DeleteStudent(w, r, params["id"])
 
-	studentdetails := models.Response{
-		StatusCode: utils.SuccessCode,
-		Message:    "Deleted the student!",
-		Data:       "Deleted the student!",
-	}
-
 	if err != "" {
-		studentdetails = models.Response{
+		studentdetails := models.Response{
 			StatusCode: utils.WrongParam,
 			Message:    utils.DeletionFailed,
 			Data:       utils.DeletionFailed,
 		}
 		ResponseJSON(w, studentdetails)
 		return
+	}
+
+	studentdetails := models.Response{
+		StatusCode: utils.SuccessCode,
+		Message:    "Deleted the student!",
+		Data:       "Deleted the student!",
 	}
 
 	// Return from the function
@@ -135,24 +142,28 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please give a first name")
 	} else if student.Password == "" {
 		ResponseJSON(w, "Please give a password")
+	} else if !validateEmail(student.EmailID) {
+		ResponseJSON(w, "Email address is invalid")
 	} else {
 		params := mux.Vars(r)
 		err := models.UpdateStudent(w, r, params["id"], student)
 
-		studentdetails := models.Response{
-			StatusCode: utils.SuccessCode,
-			Message:    "Updated the student!",
-			Data:       "Updated the student!",
-		}
-
 		if err != "" {
-			studentdetails = models.Response{
+			studentdetails := models.Response{
 				StatusCode: utils.WrongParam,
 				Message:    utils.UpdatingFailed,
 				Data:       utils.UpdatingFailed,
 			}
+
+			// Return from the function
 			ResponseJSON(w, studentdetails)
 			return
+		}
+
+		studentdetails := models.Response{
+			StatusCode: utils.SuccessCode,
+			Message:    "Updating successful",
+			Data:       "Updating successful",
 		}
 
 		// Return from the function

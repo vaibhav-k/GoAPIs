@@ -74,7 +74,7 @@ func AddSection(w http.ResponseWriter, r *http.Request) {
 			sectiondetails := models.Response{
 				StatusCode: utils.WrongParam,
 				Message:    utils.InsertionFailed,
-				Data:       "Section is not added added!",
+				Data:       "Section is not added!",
 			}
 
 			// Return from the function

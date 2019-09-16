@@ -108,6 +108,8 @@ func AddTeacher(w http.ResponseWriter, r *http.Request) {
 		ResponseJSON(w, "Please give a first name")
 	} else if teacher.Password == "" {
 		ResponseJSON(w, "Please give a password")
+	} else if !validateEmail(teacher.EmailID) {
+		ResponseJSON(w, "Email address is invalid")
 	} else {
 		err := models.AddTeacher(w, r, teacher)
 
@@ -166,13 +168,15 @@ func DeleteTeacher(w http.ResponseWriter, r *http.Request) {
 
 // UpdateTeacher updates details of a teacher
 func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
+	// Check if the Method is correct
 	if r.Method != "PUT" {
 		http.Error(w, http.StatusText(utils.WrongMethod), utils.WrongMethod)
 		ResponseJSON(w, "Please use the PUT method for this route")
 	}
 	fmt.Println("Updating a teacher's details!")
 	w.Header().Set("Content-Type", "application/json")
-	params := mux.Vars(r)
+
+	// Get the user's input details from the POST body
 	decoder := json.NewDecoder(r.Body)
 	var teacher models.Teachers
 	err := decoder.Decode(&teacher)
@@ -180,21 +184,27 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
+	// Check the user's input and then call the handler
 	if teacher.TeacherID < 0 {
 		ResponseJSON(w, "Please give a valid ID")
 	} else if teacher.FirstName == "" {
 		ResponseJSON(w, "Please give a first name")
 	} else if teacher.Password == "" {
 		ResponseJSON(w, "Please give a password")
+	} else if !validateEmail(teacher.EmailID) {
+		ResponseJSON(w, "Email address is invalid")
 	} else {
-		er := models.UpdateTeacher(w, r, params["id"], teacher)
+		params := mux.Vars(r)
+		err := models.UpdateTeacher(w, r, params["id"], teacher)
 
-		if er != "" {
+		if err != "" {
 			teacherdetails := models.Response{
 				StatusCode: utils.WrongParam,
 				Message:    utils.UpdatingFailed,
 				Data:       utils.UpdatingFailed,
 			}
+
+			// Return from the function
 			ResponseJSON(w, teacherdetails)
 			return
 		}
@@ -204,7 +214,8 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 			Message:    "Updating successful",
 			Data:       "Updating successful",
 		}
+
+		// Return from the function
 		ResponseJSON(w, teacherdetails)
-		return
 	}
 }

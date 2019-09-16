@@ -68,7 +68,7 @@ func TestNoticesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
-func TestNoticeEndpoint(t *testing.T) {
+func TestValidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
@@ -86,4 +86,24 @@ func TestNoticeEndpoint(t *testing.T) {
 	json.NewDecoder(response.Body).Decode(&resp)
 
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
+}
+
+func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	notice := &models.Notice{
+		TeacherID: 200,
+		Notice:    "Hello world",
+	}
+	jsonNotice, _ := json.Marshal(notice)
+
+	request, _ := http.NewRequest("POST", "/notices", bytes.NewBuffer(jsonNotice))
+	response := httptest.NewRecorder()
+	RouterNotice().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
