@@ -140,6 +140,28 @@ func TestInvalidIDUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+func TestInvalidDetailsUpdateTeacherEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	teacher := &models.Teachers{
+		FirstName: "",
+		LastName:  "Gates",
+		EmailID:   "billgatesschoolcom",
+		Password:  "teacher",
+	}
+	jsonPerson, _ := json.Marshal(teacher)
+
+	request, _ := http.NewRequest("PUT", "/teacher/3", bytes.NewBuffer(jsonPerson))
+	response := httptest.NewRecorder()
+	RouterTeacher().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
 func TestDeleteTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

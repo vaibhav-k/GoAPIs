@@ -17,6 +17,14 @@ func validateEmail(email string) bool {
 	return Re.MatchString(email)
 }
 
+// validateTelephone checks if the telephone number is valid
+func validateTelephone(telephone string) bool {
+	if len(telephone) >= 8 && len(telephone) <= 10 {
+		return true
+	}
+	return false
+}
+
 // GetStudents gets all of all students from the database
 func GetStudents(w http.ResponseWriter, r *http.Request) {
 	// Check if the Method is correct
@@ -136,14 +144,42 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check the user's input and then call the handler
-	if student.StudentID < 0 {
-		ResponseJSON(w, "Please give a valid ID")
-	} else if student.FirstName == "" {
-		ResponseJSON(w, "Please give a first name")
+	if student.FirstName == "" {
+		studentdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a first name",
+		}
+
+		// Return from the function
+		ResponseJSON(w, studentdetails)
 	} else if student.Password == "" {
-		ResponseJSON(w, "Please give a password")
+		studentdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a password",
+		}
+
+		// Return from the function
+		ResponseJSON(w, studentdetails)
 	} else if !validateEmail(student.EmailID) {
-		ResponseJSON(w, "Email address is invalid")
+		studentdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Email address is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, studentdetails)
+	} else if !validateTelephone(student.Telephone) {
+		studentdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Telephone number is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, studentdetails)
 	} else {
 		params := mux.Vars(r)
 		err := models.UpdateStudent(w, r, params["id"], student)

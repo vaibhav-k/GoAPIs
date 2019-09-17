@@ -103,13 +103,45 @@ func AddTeacher(w http.ResponseWriter, r *http.Request) {
 
 	// Check the user's input and then call the handler
 	if teacher.TeacherID < 0 {
-		ResponseJSON(w, "Please give a valid ID")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a valid ID",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
+		return
 	} else if teacher.FirstName == "" {
-		ResponseJSON(w, "Please give a first name")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a first name",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
+		return
 	} else if teacher.Password == "" {
-		ResponseJSON(w, "Please give a password")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a password",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
+		return
 	} else if !validateEmail(teacher.EmailID) {
-		ResponseJSON(w, "Email address is invalid")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Email address is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
+		return
 	} else {
 		err := models.AddTeacher(w, r, teacher)
 
@@ -185,14 +217,33 @@ func UpdateTeacher(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check the user's input and then call the handler
-	if teacher.TeacherID < 0 {
-		ResponseJSON(w, "Please give a valid ID")
-	} else if teacher.FirstName == "" {
-		ResponseJSON(w, "Please give a first name")
+	if teacher.FirstName == "" {
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a first name",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
 	} else if teacher.Password == "" {
-		ResponseJSON(w, "Please give a password")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a password",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
 	} else if !validateEmail(teacher.EmailID) {
-		ResponseJSON(w, "Email address is invalid")
+		teacherdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Email address is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, teacherdetails)
 	} else {
 		params := mux.Vars(r)
 		err := models.UpdateTeacher(w, r, params["id"], teacher)
