@@ -32,6 +32,7 @@ func TestStudentsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/students", nil)
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -39,6 +40,7 @@ func TestStudentsEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -47,6 +49,7 @@ func TestValidStudentIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/student/1", nil)
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -54,6 +57,7 @@ func TestValidStudentIDEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -66,9 +70,11 @@ func TestInvalidStudentIDEndpoint(t *testing.T) {
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
 
+	// Make the request
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -87,6 +93,7 @@ func TestValidIDUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/37", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -94,6 +101,7 @@ func TestValidIDUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -112,6 +120,7 @@ func TestInvalidIDUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/379", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -119,6 +128,7 @@ func TestInvalidIDUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -137,6 +147,7 @@ func TestInvalidFirstNameUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -144,6 +155,7 @@ func TestInvalidFirstNameUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -162,6 +174,7 @@ func TestInvalidEmailIDUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -169,6 +182,7 @@ func TestInvalidEmailIDUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -187,6 +201,7 @@ func TestInvalidPasswordUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -194,6 +209,7 @@ func TestInvalidPasswordUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -212,6 +228,7 @@ func TestInvalidTelephoneUpdateStudentEndpoint(t *testing.T) {
 	}
 	jsonPerson, _ := json.Marshal(student)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -219,6 +236,7 @@ func TestInvalidTelephoneUpdateStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -227,6 +245,7 @@ func TestValidIDDeleteStudentEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("DELETE", "/student/13", nil)
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -234,6 +253,7 @@ func TestValidIDDeleteStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -242,6 +262,7 @@ func TestInvalidIDDeleteStudentEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("DELETE", "/student/58765", nil)
 	response := httptest.NewRecorder()
 	RouterStudent().ServeHTTP(response, request)
@@ -249,5 +270,6 @@ func TestInvalidIDDeleteStudentEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

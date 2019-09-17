@@ -28,6 +28,7 @@ func TestExamsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/exams", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
@@ -35,6 +36,7 @@ func TestExamsEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -43,6 +45,7 @@ func TestValidExamIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/exams/1", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
@@ -50,6 +53,7 @@ func TestValidExamIDEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -58,6 +62,7 @@ func TestInvalidExamIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/exams/1234567890", nil)
 	response := httptest.NewRecorder()
 	RouterExam().ServeHTTP(response, request)
@@ -65,5 +70,6 @@ func TestInvalidExamIDEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

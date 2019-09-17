@@ -30,6 +30,7 @@ func TestSubjectsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/subjects", nil)
 	response := httptest.NewRecorder()
 	RouterSubject().ServeHTTP(response, request)
@@ -37,6 +38,7 @@ func TestSubjectsEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -52,6 +54,7 @@ func TestValidPostSubjectEndpoint(t *testing.T) {
 	}
 	jsonSubject, _ := json.Marshal(&subject)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/subjects", bytes.NewBuffer(jsonSubject))
 	response := httptest.NewRecorder()
 	RouterSubject().ServeHTTP(response, request)
@@ -59,6 +62,7 @@ func TestValidPostSubjectEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -74,6 +78,7 @@ func TestInvalidTitlePostSubjectEndpoint(t *testing.T) {
 	}
 	jsonSubject, _ := json.Marshal(&subject)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/subjects", bytes.NewBuffer(jsonSubject))
 	response := httptest.NewRecorder()
 	RouterSubject().ServeHTTP(response, request)
@@ -81,5 +86,6 @@ func TestInvalidTitlePostSubjectEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

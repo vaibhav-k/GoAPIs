@@ -31,6 +31,7 @@ func TestValidNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/notices/1", nil)
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -38,6 +39,7 @@ func TestValidNoticesEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -46,6 +48,7 @@ func TestInvalidNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/notices/123456", nil)
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -53,6 +56,7 @@ func TestInvalidNoticesEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No response is expected")
 }
 
@@ -61,6 +65,7 @@ func TestNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/notices", nil)
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -68,6 +73,7 @@ func TestNoticesEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -82,6 +88,7 @@ func TestValidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	}
 	jsonNotice, _ := json.Marshal(notice)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/notices", bytes.NewBuffer(jsonNotice))
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -89,6 +96,7 @@ func TestValidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -103,6 +111,7 @@ func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	}
 	jsonNotice, _ := json.Marshal(notice)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/notices", bytes.NewBuffer(jsonNotice))
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -110,6 +119,7 @@ func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -124,6 +134,7 @@ func TestInvalidNoticePostNoticeEndpoint(t *testing.T) {
 	}
 	jsonNotice, _ := json.Marshal(notice)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/notices", bytes.NewBuffer(jsonNotice))
 	response := httptest.NewRecorder()
 	RouterNotice().ServeHTTP(response, request)
@@ -131,5 +142,6 @@ func TestInvalidNoticePostNoticeEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

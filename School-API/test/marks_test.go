@@ -31,6 +31,7 @@ func TestValidMarksEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/mark/59", nil)
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -38,6 +39,7 @@ func TestValidMarksEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -46,6 +48,7 @@ func TestInvalidMarksEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
+	// Make the request
 	request, _ := http.NewRequest("GET", "/mark/1234", nil)
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -53,6 +56,7 @@ func TestInvalidMarksEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 
 }
@@ -70,6 +74,7 @@ func TestValidPostMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -77,6 +82,7 @@ func TestValidPostMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -93,6 +99,7 @@ func TestInvalidStudentIDPostMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -100,6 +107,7 @@ func TestInvalidStudentIDPostMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -116,6 +124,7 @@ func TestInvalidSubjectPostMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -123,6 +132,7 @@ func TestInvalidSubjectPostMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -139,6 +149,7 @@ func TestInvalidExamtypeIDPostMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -146,6 +157,7 @@ func TestInvalidExamtypeIDPostMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -162,6 +174,7 @@ func TestValidUpdateMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/mark/6", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -169,6 +182,7 @@ func TestValidUpdateMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -185,6 +199,7 @@ func TestInvalidStudentIDUpdateMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/mark/2", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -192,6 +207,7 @@ func TestInvalidStudentIDUpdateMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -208,6 +224,7 @@ func TestInvalidSubjectUpdateMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/mark/3", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -215,6 +232,7 @@ func TestInvalidSubjectUpdateMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -231,6 +249,7 @@ func TestInvalidExamtypeIDUpdateMarkEndpoint(t *testing.T) {
 	}
 	jsonMarks, _ := json.Marshal(marks)
 
+	// Make the request
 	request, _ := http.NewRequest("PUT", "/mark/4", bytes.NewBuffer(jsonMarks))
 	response := httptest.NewRecorder()
 	RouterMark().ServeHTTP(response, request)
@@ -238,5 +257,6 @@ func TestInvalidExamtypeIDUpdateMarkEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

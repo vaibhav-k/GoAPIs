@@ -35,6 +35,7 @@ func TestValidLoginUserEndpoint(t *testing.T) {
 	}
 	jsonUser, _ := json.Marshal(teacher)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(jsonUser))
 	response := httptest.NewRecorder()
 	RouterLogin().ServeHTTP(response, request)
@@ -42,6 +43,7 @@ func TestValidLoginUserEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
@@ -56,6 +58,7 @@ func TestInvalidEmailIDLoginUserEndpoint(t *testing.T) {
 	}
 	jsonUser, _ := json.Marshal(teacher)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(jsonUser))
 	response := httptest.NewRecorder()
 	RouterLogin().ServeHTTP(response, request)
@@ -63,6 +66,7 @@ func TestInvalidEmailIDLoginUserEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
@@ -76,6 +80,7 @@ func TestInvalidPasswordLoginUserEndpoint(t *testing.T) {
 	}
 	jsonUser, _ := json.Marshal(teacher)
 
+	// Make the request
 	request, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(jsonUser))
 	response := httptest.NewRecorder()
 	RouterLogin().ServeHTTP(response, request)
@@ -83,5 +88,6 @@ func TestInvalidPasswordLoginUserEndpoint(t *testing.T) {
 	var resp map[string]interface{}
 	json.NewDecoder(response.Body).Decode(&resp)
 
+	// Check if what we wanted is what we got
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
