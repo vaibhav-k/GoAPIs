@@ -19,7 +19,7 @@ func RouterNotice() *mux.Router {
 	router := mux.NewRouter()
 	fmt.Println("http://localhost:8080")
 
-	router.HandleFunc("/notices/{id}", controllers.GetNotice).Methods("GET")
+	router.HandleFunc("/notices/{noticeID}", controllers.GetNotice).Methods("GET")
 	router.HandleFunc("/notices", controllers.GetNotices).Methods("GET")
 	router.HandleFunc("/notices", controllers.AddNotice).Methods("POST")
 
@@ -95,6 +95,26 @@ func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	notice := &models.Notice{
 		TeacherID: 200,
 		Notice:    "Hello world",
+	}
+	jsonNotice, _ := json.Marshal(notice)
+
+	request, _ := http.NewRequest("POST", "/notices", bytes.NewBuffer(jsonNotice))
+	response := httptest.NewRecorder()
+	RouterNotice().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidNoticePostNoticeEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	notice := &models.Notice{
+		TeacherID: 2,
+		Notice:    "Hi",
 	}
 	jsonNotice, _ := json.Marshal(notice)
 

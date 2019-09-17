@@ -81,12 +81,24 @@ func AddTeacher(w http.ResponseWriter, r *http.Request, teacher Teachers) string
 
 // DeleteTeacher deletes a teacher from the database
 func DeleteTeacher(w http.ResponseWriter, r *http.Request, id string) string {
-	// Query the DB
-	s := fmt.Sprintf("DELETE FROM `school_teachers` WHERE teacher_id = '%s'", id)
-	result, err := db.Query(s)
 
-	if err == nil || result != nil {
-		return ""
+	s := fmt.Sprintf("SELECT * FROM `school_teachers` WHERE teacher_id = '%s'", id)
+	result, _ := db.Query(s)
+
+	// Make the student struct
+	var teacher Teachers
+	for result.Next() {
+		result.Scan(&teacher.TeacherID, &teacher.FirstName, &teacher.LastName, &teacher.EmailID, &teacher.Password)
+	}
+
+	if teacher.TeacherID != 0 {
+		// Query the DB
+		s := fmt.Sprintf("DELETE FROM `school_teachers` WHERE teacher_id = '%s'", id)
+		result, err := db.Query(s)
+
+		if err == nil || result != nil {
+			return ""
+		}
 	}
 	return "Teacher could not be deleted"
 }

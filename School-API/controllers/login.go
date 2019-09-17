@@ -35,7 +35,6 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 			Message:    "Couldn't log in",
 			Data:       "Wrong credentials",
 		}
-		fmt.Println(logintoken.StatusCode)
 		ResponseJSON(w, logintoken)
 		return
 	}

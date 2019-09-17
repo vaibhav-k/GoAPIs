@@ -64,7 +64,41 @@ func AddMarks(w http.ResponseWriter, r *http.Request) {
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {
-		ResponseJSON(w, "Please enter positive marks")
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please enter positive marks",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.ExamTypeID == 0 {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a valid exam type ID",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.Subject == "" {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Subject is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.StudentID < 0 {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Student ID is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
 	} else {
 		er := models.AddMarks(w, r, mark)
 
@@ -106,7 +140,41 @@ func UpdateMarks(w http.ResponseWriter, r *http.Request) {
 
 	// User input validation and calling the handler
 	if mark.Marks < 0 {
-		ResponseJSON(w, "Please enter positive marks")
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please enter positive marks",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.ExamTypeID == 0 {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Please give a valid exam type ID",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.Subject == "" {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Subject is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
+	} else if mark.StudentID < 0 {
+		markdetails := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    utils.UpdatingFailed,
+			Data:       "Student ID is invalid",
+		}
+
+		// Return from the function
+		ResponseJSON(w, markdetails)
 	} else {
 		params := mux.Vars(r)
 		er := models.UpdateMarks(w, r, params["id"], mark)

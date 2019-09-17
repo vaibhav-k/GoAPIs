@@ -18,7 +18,7 @@ func RouterExam() *mux.Router {
 	router := mux.NewRouter()
 	fmt.Println("http://localhost:8080")
 
-	router.HandleFunc("/exams/{id}", controllers.GetExam).Methods("GET")
+	router.HandleFunc("/exams/{examID}", controllers.GetExam).Methods("GET")
 	router.HandleFunc("/exams", controllers.GetExams).Methods("GET")
 	return router
 }

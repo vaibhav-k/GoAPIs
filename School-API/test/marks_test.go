@@ -19,9 +19,9 @@ func RouterMark() *mux.Router {
 	router := mux.NewRouter()
 	fmt.Println("http://localhost:8080")
 
-	router.HandleFunc("/mark/{id}", controllers.GetMarks).Methods("GET")
+	router.HandleFunc("/mark/{studentID}", controllers.GetMarks).Methods("GET")
 	router.HandleFunc("/marks", controllers.AddMarks).Methods("POST")
-	router.HandleFunc("/mark/{id}", controllers.UpdateMarks).Methods("PUT")
+	router.HandleFunc("/mark/{marksID}", controllers.UpdateMarks).Methods("PUT")
 
 	return router
 }
@@ -55,7 +55,7 @@ func TestInvalidMarksEndpoint(t *testing.T) {
 
 }
 
-func TestPostMarkEndpoint(t *testing.T) {
+func TestValidPostMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
@@ -75,6 +75,72 @@ func TestPostMarkEndpoint(t *testing.T) {
 	json.NewDecoder(response.Body).Decode(&resp)
 
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
+}
+
+func TestInvalidStudentIDPostMarkEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	marks := &models.Marks{
+		ExamTypeID: 2,
+		Subject:    "Arts",
+		StudentID:  512345,
+		Marks:      27,
+	}
+	jsonMarks, _ := json.Marshal(marks)
+
+	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
+	response := httptest.NewRecorder()
+	RouterMark().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidSubjectPostMarkEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	marks := &models.Marks{
+		ExamTypeID: 2,
+		Subject:    "Nice Subject",
+		StudentID:  5,
+		Marks:      27,
+	}
+	jsonMarks, _ := json.Marshal(marks)
+
+	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
+	response := httptest.NewRecorder()
+	RouterMark().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidExamtypeIDPostMarkEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	marks := &models.Marks{
+		ExamTypeID: 20,
+		Subject:    "Arts",
+		StudentID:  5,
+		Marks:      27,
+	}
+	jsonMarks, _ := json.Marshal(marks)
+
+	request, _ := http.NewRequest("POST", "/marks", bytes.NewBuffer(jsonMarks))
+	response := httptest.NewRecorder()
+	RouterMark().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
 func TestValidUpdateMarkEndpoint(t *testing.T) {

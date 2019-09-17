@@ -20,7 +20,7 @@ func RouterSection() *mux.Router {
 	fmt.Println("http://localhost:8080")
 
 	router.HandleFunc("/sections", controllers.GetSections).Methods("GET")
-	router.HandleFunc("/sections", controllers.AddSection).Methods("POSt")
+	router.HandleFunc("/sections", controllers.AddSection).Methods("POST")
 
 	return router
 }
@@ -39,14 +39,13 @@ func TestSectionsEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
-func TestValidPostSectionEndpoint(t *testing.T) {
+func TestPostSectionEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
 	section := &models.Sections{
-		ClassID:        9,
-		SectionID:      2,
-		ClassSectionID: 27,
+		ClassID:   9,
+		SectionID: 4,
 	}
 	jsonSection, _ := json.Marshal(section)
 
@@ -58,25 +57,4 @@ func TestValidPostSectionEndpoint(t *testing.T) {
 	json.NewDecoder(response.Body).Decode(&resp)
 
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
-}
-
-func TestInvalidPostSectionEndpoint(t *testing.T) {
-	// Initialize the database connection
-	models.InitDB()
-
-	section := &models.Sections{
-		ClassID:        8,
-		SectionID:      3,
-		ClassSectionID: 24,
-	}
-	jsonSection, _ := json.Marshal(section)
-
-	request, _ := http.NewRequest("POST", "/sections", bytes.NewBuffer(jsonSection))
-	response := httptest.NewRecorder()
-	RouterSection().ServeHTTP(response, request)
-
-	var resp map[string]interface{}
-	json.NewDecoder(response.Body).Decode(&resp)
-
-	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }

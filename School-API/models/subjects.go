@@ -61,6 +61,7 @@ func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) stri
 	_, err := db.Query(s)
 
 	if err != nil {
+		fmt.Println("Error in query to add subject")
 		return "Could not insert subject"
 	}
 
@@ -70,6 +71,7 @@ func AddSubject(w http.ResponseWriter, r *http.Request, subject SubjectAdd) stri
 		_, er := db.Query(t)
 
 		if er != nil {
+			fmt.Println("Error in query to add subjects to classes")
 			return "Could not add subject to classes"
 		}
 	}

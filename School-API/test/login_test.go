@@ -44,13 +44,33 @@ func TestValidLoginUserEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
-func TestInvalidLoginUserEndpoint(t *testing.T) {
+func TestInvalidEmailIDLoginUserEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
 	teacher := &models.User2{
 		Email:    "richestman@money.com2",
 		Password: "teacher",
+	}
+	jsonUser, _ := json.Marshal(teacher)
+
+	request, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(jsonUser))
+	response := httptest.NewRecorder()
+	RouterLogin().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidPasswordLoginUserEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	teacher := &models.User2{
+		Email:    "richestman@money.com",
+		Password: "teacher2",
 	}
 	jsonUser, _ := json.Marshal(teacher)
 

@@ -20,9 +20,9 @@ func RouterStudent() *mux.Router {
 	fmt.Println("http://localhost:8080")
 
 	router.HandleFunc("/students", controllers.GetStudents).Methods("GET")
-	router.HandleFunc("/student/{id}", controllers.GetStudent).Methods("GET")
-	router.HandleFunc("/student/{id}", controllers.UpdateStudent).Methods("PUT")
-	router.HandleFunc("/student/{id}", controllers.DeleteStudent).Methods("DELETE")
+	router.HandleFunc("/student/{studentID}", controllers.GetStudent).Methods("GET")
+	router.HandleFunc("/student/{studentID}", controllers.UpdateStudent).Methods("PUT")
+	router.HandleFunc("/student/{studentID}", controllers.DeleteStudent).Methods("DELETE")
 
 	return router
 }
@@ -117,16 +117,88 @@ func TestInvalidIDUpdateStudentEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
-func TestInvalidDetailsUpdateStudentEndpoint(t *testing.T) {
+func TestInvalidFirstNameUpdateStudentEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
 
 	student := &models.Students{
 		FirstName:      "",
 		LastName:       "Jobs",
+		EmailID:        "stevejobs@school.com",
+		Password:       "student",
+		Telephone:      "1092837465",
+		ClassSectionID: 22,
+	}
+	jsonPerson, _ := json.Marshal(student)
+
+	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
+	response := httptest.NewRecorder()
+	RouterStudent().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidEmailIDUpdateStudentEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	student := &models.Students{
+		FirstName:      "Steve",
+		LastName:       "Jobs",
 		EmailID:        "stevejobsschoolcom",
 		Password:       "student",
 		Telephone:      "1092837465",
+		ClassSectionID: 22,
+	}
+	jsonPerson, _ := json.Marshal(student)
+
+	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
+	response := httptest.NewRecorder()
+	RouterStudent().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidPasswordUpdateStudentEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	student := &models.Students{
+		FirstName:      "Steve",
+		LastName:       "Jobs",
+		EmailID:        "stevejobs@school.com",
+		Password:       "",
+		Telephone:      "1092837465",
+		ClassSectionID: 22,
+	}
+	jsonPerson, _ := json.Marshal(student)
+
+	request, _ := http.NewRequest("PUT", "/student/3", bytes.NewBuffer(jsonPerson))
+	response := httptest.NewRecorder()
+	RouterStudent().ServeHTTP(response, request)
+
+	var resp map[string]interface{}
+	json.NewDecoder(response.Body).Decode(&resp)
+
+	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
+}
+
+func TestInvalidTelephoneUpdateStudentEndpoint(t *testing.T) {
+	// Initialize the database connection
+	models.InitDB()
+
+	student := &models.Students{
+		FirstName:      "Steve",
+		LastName:       "Jobs",
+		EmailID:        "stevejobs@school.com",
+		Password:       "student",
+		Telephone:      "12345",
 		ClassSectionID: 22,
 	}
 	jsonPerson, _ := json.Marshal(student)

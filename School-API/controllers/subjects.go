@@ -59,10 +59,14 @@ func AddSubject(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Check the user's input and then call the handler
-	if subject.SubjectID < 0 {
-		ResponseJSON(w, "Please give a valid ID")
-	} else if subject.Title == "" {
-		ResponseJSON(w, "Please give a valid title")
+	if subject.Title == "" {
+		sub := models.Response{
+			StatusCode: utils.WrongParam,
+			Message:    "Please give a valid title",
+			Data:       "Please give a valid title",
+		}
+		ResponseJSON(w, sub)
+		// return
 	} else {
 		er := models.AddSubject(w, r, subject)
 
@@ -75,6 +79,7 @@ func AddSubject(w http.ResponseWriter, r *http.Request) {
 			ResponseJSON(w, sub)
 			return
 		}
+		fmt.Println("Some error occurred")
 		sub := models.Response{
 			StatusCode: utils.WrongParam,
 			Message:    utils.InsertionFailed,
