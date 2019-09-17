@@ -1,9 +1,7 @@
 # GoAPIs
 Some APIs I made with Go as part of my internship at Optimus Information.
 
-This repo has 2 APIs :-
-	1. Express-API
-	2. School-API
+This repo has 2 APIs: Express-API and School-API.
 	
 Express API is an ecommerce API in which you can add products to the website and users can select and add products to their carts. API has user authentication so each user can only view the products in his/her own cart.
 
