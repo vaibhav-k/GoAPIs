@@ -125,8 +125,8 @@ func TestInvalidDetailsUpdateStudentEndpoint(t *testing.T) {
 		FirstName:      "",
 		LastName:       "Jobs",
 		EmailID:        "stevejobsschoolcom",
-		Password:       "",
-		Telephone:      "55555",
+		Password:       "student",
+		Telephone:      "1092837465",
 		ClassSectionID: 22,
 	}
 	jsonPerson, _ := json.Marshal(student)

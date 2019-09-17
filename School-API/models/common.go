@@ -1,7 +1,5 @@
 package models
 
-// import "database/sql"
-
 import (
 	"database/sql"
 	"encoding/json"
