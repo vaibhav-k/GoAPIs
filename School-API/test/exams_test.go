@@ -23,6 +23,7 @@ func RouterExam() *mux.Router {
 	return router
 }
 
+// Tests if all the exams are displayed
 func TestExamsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -37,6 +38,7 @@ func TestExamsEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if all the exams are displayed for a valid exam type ID
 func TestValidExamIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -51,6 +53,7 @@ func TestValidExamIDEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if all the exams are displayed for an invalid exam type ID
 func TestInvalidExamIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

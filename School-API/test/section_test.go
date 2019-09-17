@@ -25,6 +25,7 @@ func RouterSection() *mux.Router {
 	return router
 }
 
+// Tests if all the sections are viewable
 func TestSectionsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -39,6 +40,7 @@ func TestSectionsEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if all a section can be added with valid details
 func TestPostSectionEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

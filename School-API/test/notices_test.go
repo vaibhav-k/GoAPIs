@@ -26,6 +26,7 @@ func RouterNotice() *mux.Router {
 	return router
 }
 
+// Tests if the notice with a valid ID is viewable
 func TestValidNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -40,6 +41,7 @@ func TestValidNoticesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the notice with an invalid ID is not viewable
 func TestInvalidNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -54,6 +56,7 @@ func TestInvalidNoticesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No response is expected")
 }
 
+// Tests if all the notices are viewable
 func TestNoticesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -68,6 +71,7 @@ func TestNoticesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the notice with a valid teacher ID can be added
 func TestValidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -88,6 +92,7 @@ func TestValidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the notice with an invalid teacher ID can not be added
 func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -108,6 +113,7 @@ func TestInvalidTeacherIDPostNoticeEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the notice with an invalid notice length can be added
 func TestInvalidNoticePostNoticeEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

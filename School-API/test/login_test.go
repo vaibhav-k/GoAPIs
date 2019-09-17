@@ -24,6 +24,7 @@ func RouterLogin() *mux.Router {
 	return router
 }
 
+// Tests if a user can login with valid credentials
 func TestValidLoginUserEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -44,6 +45,7 @@ func TestValidLoginUserEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a user can login with invalid credentials
 func TestInvalidEmailIDLoginUserEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

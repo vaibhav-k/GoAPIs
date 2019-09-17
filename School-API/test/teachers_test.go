@@ -28,6 +28,7 @@ func RouterTeacher() *mux.Router {
 	return router
 }
 
+// Tests if all the teacher details can be viewed
 func TestTeachersEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -42,6 +43,7 @@ func TestTeachersEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the teacher details can be viewed whose valid ID is provided
 func TestValidTeacherIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -57,6 +59,7 @@ func TestValidTeacherIDEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the teacher details can be viewed whose invalid ID is provided
 func TestInvalidTeacherIDEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -72,6 +75,7 @@ func TestInvalidTeacherIDEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the teacher details can be added whose valid details are provided
 func TestPostTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -94,6 +98,7 @@ func TestPostTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the teacher details can be updated whose valid details are provided
 func TestValidIDUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -116,6 +121,7 @@ func TestValidIDUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the teacher details can be updated whose invalid ID is provided
 func TestInvalidIDUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -138,6 +144,7 @@ func TestInvalidIDUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the teacher details can be updated whose invalid first name is provided
 func TestInvalidFirstNameUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -160,6 +167,7 @@ func TestInvalidFirstNameUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the teacher details can be updated whose invalid email ID is provided
 func TestInvalidEmailIDUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -182,6 +190,7 @@ func TestInvalidEmailIDUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the teacher details can be updated whose invalid password is provided
 func TestInvalidPasswordUpdateTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -204,6 +213,7 @@ func TestInvalidPasswordUpdateTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if the teacher details can be deleted whose valid ID is provided
 func TestValidIDDeleteTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -218,6 +228,7 @@ func TestValidIDDeleteTeacherEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if the teacher details can be deleted whose invalid ID is provided
 func TestInvalidIDDeleteTeacherEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

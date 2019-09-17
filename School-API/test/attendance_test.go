@@ -24,6 +24,7 @@ func RouterAttd() *mux.Router {
 	return router
 }
 
+// Tests attendances for a date whose attendances are taken
 func TestValidAttendancesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -38,6 +39,7 @@ func TestValidAttendancesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests attendances for a date whose attendances are not taken
 func TestInvalidAttendancesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -52,6 +54,7 @@ func TestInvalidAttendancesEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests all attendances
 func TestAttendancesEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

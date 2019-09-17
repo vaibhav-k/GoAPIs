@@ -25,6 +25,7 @@ func RouterSubject() *mux.Router {
 	return router
 }
 
+// Tests if all the sections can be viewed
 func TestSubjectsEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -39,6 +40,7 @@ func TestSubjectsEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a section can be added with valid details
 func TestValidPostSubjectEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -60,6 +62,7 @@ func TestValidPostSubjectEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a section can be added with invalid details
 func TestInvalidTitlePostSubjectEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()

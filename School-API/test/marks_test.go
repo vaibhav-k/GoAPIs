@@ -26,6 +26,7 @@ func RouterMark() *mux.Router {
 	return router
 }
 
+// Tests if a user can access marks for a valid student ID
 func TestValidMarksEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -40,6 +41,7 @@ func TestValidMarksEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a user can access marks for a invalid student ID
 func TestInvalidMarksEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -55,6 +57,7 @@ func TestInvalidMarksEndpoint(t *testing.T) {
 
 }
 
+// Tests if a user can access add marks with valid details
 func TestValidPostMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -77,6 +80,7 @@ func TestValidPostMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a user can access add marks with invalid student ID
 func TestInvalidStudentIDPostMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -99,6 +103,7 @@ func TestInvalidStudentIDPostMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if a user can access add marks with invalid subject
 func TestInvalidSubjectPostMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -121,6 +126,7 @@ func TestInvalidSubjectPostMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if a user can access add marks with invalid exam type id
 func TestInvalidExamtypeIDPostMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -143,6 +149,7 @@ func TestInvalidExamtypeIDPostMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if a user can update marks with valid details
 func TestValidUpdateMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -165,6 +172,7 @@ func TestValidUpdateMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusOK), resp["status_code"], "OK response is expected")
 }
 
+// Tests if a user can update marks with invalid student ID
 func TestInvalidStudentIDUpdateMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -187,6 +195,7 @@ func TestInvalidStudentIDUpdateMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if a user can update marks with invalid subject
 func TestInvalidSubjectUpdateMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
@@ -209,6 +218,7 @@ func TestInvalidSubjectUpdateMarkEndpoint(t *testing.T) {
 	assert.Equal(t, float64(http.StatusNoContent), resp["status_code"], "No content response is expected")
 }
 
+// Tests if a user can update marks with invalid exam type id
 func TestInvalidExamtypeIDUpdateMarkEndpoint(t *testing.T) {
 	// Initialize the database connection
 	models.InitDB()
