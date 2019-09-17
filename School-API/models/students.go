@@ -94,12 +94,12 @@ func UpdateStudent(w http.ResponseWriter, r *http.Request, id string, student St
 	s := fmt.Sprintf("SELECT * FROM `school_students` WHERE `student_id` = '%s'", id)
 	result, _ := db.Query(s)
 
-	var student_scan Students
+	var studentScan Students
 	for result.Next() {
-		result.Scan(&student_scan.StudentID, &student_scan.FirstName, &student_scan.LastName, &student_scan.EmailID, &student_scan.Password, &student_scan.Telephone, &student_scan.ClassSectionID)
+		result.Scan(&studentScan.StudentID, &studentScan.FirstName, &studentScan.LastName, &studentScan.EmailID, &studentScan.Password, &studentScan.Telephone, &studentScan.ClassSectionID)
 	}
 
-	if student_scan.StudentID != 0 {
+	if studentScan.StudentID != 0 {
 		// Query the DB
 		s := fmt.Sprintf("UPDATE `school_students` SET `first_name` = '%s', `last_name` = '%s', `email_id` = '%s', `password` = '%s', `telephone` = '%s', `class_section_id` = %d WHERE student_id = '%s'", student.FirstName, student.LastName, student.EmailID, student.Password, student.Telephone, student.ClassSectionID, id)
 		result, err := db.Query(s)
