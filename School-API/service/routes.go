@@ -7,21 +7,20 @@ import (
 	"../controllers"
 	"../middlewares"
 
-	// Package for the db connection
-	_ "github.com/go-sql-driver/mysql"
-
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	// Package for the db connection
+	_ "github.com/go-sql-driver/mysql"
 )
 
 // InitServer gives the routes for the API and then starts the server
 func InitServer() {
 	// Create a new router and print the URL
 	router := mux.NewRouter()
-	fmt.Println("http://localhost:8080")
+	fmt.Println("The api is online at:	http://localhost:8080")
 
 	// Make the routes with the handler functions
-	router.HandleFunc("/login", controllers.LoginUserCombined).Methods("POST")
+	router.HandleFunc("/login", controllers.LoginUser).Methods("POST")
 	router.HandleFunc("/notices", middlewares.IsLoggedIn(controllers.GetNotices)).Methods("GET")
 	router.HandleFunc("/notices/{id}", middlewares.IsLoggedIn(controllers.GetNotice)).Methods("GET")
 	router.HandleFunc("/marks/{id}", middlewares.IsLoggedIn(controllers.GetMarks)).Methods("GET")

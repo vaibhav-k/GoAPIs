@@ -14,7 +14,7 @@ type User struct {
 }
 
 // LoginUser logs a user in
-func LoginUser(user User) (string, error) {
+func LoginUser(user User) (string, string) {
 	id := 0
 	s := ""
 	tokenString := ""
@@ -28,7 +28,7 @@ func LoginUser(user User) (string, error) {
 	} else if user.Type == "admin" {
 		s = fmt.Sprintf("SELECT admin_id FROM `school_admin` WHERE `password` = '%s'", user.Password)
 	} else {
-		return utils.NoType, nil
+		return utils.NoType, "No valid type provided!"
 	}
 	result, err := db.Query(s)
 
@@ -56,5 +56,5 @@ func LoginUser(user User) (string, error) {
 			fmt.Println(error)
 		}
 	}
-	return tokenString, nil
+	return tokenString, ""
 }

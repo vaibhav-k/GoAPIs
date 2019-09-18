@@ -22,7 +22,5 @@ func InitDB() {
 	// Check for errors
 	if err != nil {
 		panic(err.Error())
-	} else {
-		fmt.Println("Connected to the database!")
 	}
 }
