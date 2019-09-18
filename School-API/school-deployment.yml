@@ -3,7 +3,7 @@ kind: Deployment                 # Type of Kubernetes resource
 metadata:
   name: go-school-api           # Name of the Kubernetes resource
 spec:
-  replicas: 3                    # Number of pods to run at any given time
+  replicas: 10                  # Number of pods to run at any given time
   selector:
     matchLabels:
       app: go-school-api        # This deployment applies to any Pods matching the specified label
@@ -17,8 +17,7 @@ spec:
         image: reklawyks/school-api:school-api 
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 8080  # Should match the port number that the Go application listens on
-        
+          - containerPort: 8080  # Should match the port number that the Go application listens on     
 ---
 apiVersion: v1
 kind: Service                    # Type of kubernetes resource
