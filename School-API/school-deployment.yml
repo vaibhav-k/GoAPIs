@@ -17,8 +17,7 @@ spec:
         image: reklawyks/school-api:school-api 
         imagePullPolicy: IfNotPresent
         ports:
-          - containerPort: 8080  # Should match the port number that the Go application listens on     
----
+          - containerPort: 8080  # Should match the port number that the Go application listens on
 apiVersion: v1
 kind: Service                    # Type of kubernetes resource
 metadata:
