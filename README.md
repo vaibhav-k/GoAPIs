@@ -1,5 +1,5 @@
 # GoAPIs
-Some APIs I made with Go as part of my internship at Optimus Information.
+Some APIs I made with Golang as part of my internship at Optimus Information.
 
 This repo has 2 APIs:
 	
